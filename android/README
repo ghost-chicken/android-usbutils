@@ -1,0 +1,117 @@
+usbutils for Android
+====================
+
+Building:
+---------
+
+To build usbutils for Android do the following:
+
+ 1. NDK requirements
+
+    1.1. Download the latest NDK from:
+         https://developer.android.com/ndk
+
+    1.2. Extract the NDK.
+
+    1.3. Open a shell and make sure there exist an NDK global variable
+         set to the directory where you extracted the NDK.
+
+         For example: export NDK="/opt/ndk-bundle"
+
+ 2. libusb requirements
+
+    2.1. Clone or download the latest libusb source code from:
+         https://github.com/libusb/libusb
+
+    2.1. Extract the libusb archive when ZIP file was downloaded.
+
+    2.2. Make sure there exists an LIBUSB global variable set to the
+         directory where you extracted the libusb archive or cloned
+         the repository.
+
+         For example: export LIBUSB="/tmp/libusb"
+
+ 3. usbhid-dump requirements
+
+    3.1. Change directory to usbutils source code and update the git
+         submodules when usbutils source code was cloned from origin
+         GitHub repository:
+
+         git submodule init
+         git submodule update
+
+    3.2. Download and extract the usbhid-dump source archive into the
+         usbutils source code directory when usbutils source code was
+         not cloned from origin GitHub repository. Download ZIP file
+         from: https://github.com/DIGImend/usbhid-dump
+
+ 3. Change directory to usbutils's "android/jni"
+
+ 4. Run "$NDK/ndk-build".
+
+The usbutils and the libusb library can then be found in:
+    "android/libs/$ARCH"
+
+Where $ARCH is one of:
+    armeabi
+    armeabi-v7a
+    mips
+    mips64
+    x86
+    x86_64
+
+Installing:
+-----------
+
+For a rooted device it is possible to install usbutils into the data area
+of a running device and set the execution permission and/or remount the
+data area with the flags "rw,exec":
+
+ 1. Enable ADB on the device.
+
+ 2. Connect the device to a machine running ADB.
+
+ 3. Explore the ADB device list and looking for your running device:
+
+    adb devices -l
+
+ 4. Make sure there exists an ADEV and ARCH global variable set to your
+    running device and the right architecture (see list above), ex.:
+
+    ADEV="0123456789ABCDEF"
+    ARCH="armeabi-v7a"
+
+ 5. Make sure there exists an ADIR global variable set to the data area
+    directory of your running device:
+
+    ADIR="/data"
+
+ 3. Execute the following commands on the machine running ADB:
+
+    # Create a sample directory
+    adb -s ${ADEV} shell mkdir -p ${ADIR}/sample
+    adb -s ${ADEV} shell ls -ald ${ADIR}/sample
+
+    # Install usbutils
+    adb -s ${ADEV} push -p ../libs/${ARCH} ${ADIR}/sample
+    adb -s ${ADEV} shell ls -al ${ADIR}/sample
+    adb -s ${ADEV} shell chmod 777 ${ADIR}/sample/lsusb
+
+    # Run lsusb to
+    adb -s ${ADEV} shell LD_LIBRARY_PATH=${ADIR}/sample ${ADIR}/sample/lsusb
+
+For a non rooted device it is possible to install usbutils into the sdcard
+area as shown above (with ADIR="/sdcard") but neither you will be able to
+set execution permition or remount with "rw,exec" nor you have a chance to
+execute the lsusb utility. You will get an error message such like this:
+
+/system/bin/sh: /sdcard/lsusb: can't execute: Permission denied
+
+Runtime Permissions:
+--------------------
+
+The default system configuration on most Android device may cause
+runtime permission errors. Read the corresponding section in the
+libusb source code:
+
+    https://github.com/libusb/libusb/blob/master/android/README
