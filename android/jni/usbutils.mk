@@ -42,6 +42,23 @@ LOCAL_MODULE := lsusb
 
 include $(BUILD_EXECUTABLE)
 
+# usbreset
+
+include $(CLEAR_VARS)
+
+LOCAL_SRC_FILES := \
+  $(USBUTILS_ROOT_REL)/usbreset.c
+
+LOCAL_C_INCLUDES += \
+  $(LOCAL_PATH)/.. \
+  $(USBUTILS_ROOT_ABS)
+
+LOCAL_SHARED_LIBRARIES += libusb1.0
+
+LOCAL_MODULE := usbreset
+
+include $(BUILD_EXECUTABLE)
+
 # usbhid-dump
 
 include $(CLEAR_VARS)

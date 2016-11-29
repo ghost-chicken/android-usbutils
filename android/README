@@ -96,9 +96,12 @@ data area with the flags "rw,exec":
     adb -s ${ADEV} push -p ../libs/${ARCH} ${ADIR}/sample
     adb -s ${ADEV} shell ls -al ${ADIR}/sample
     adb -s ${ADEV} shell chmod 777 ${ADIR}/sample/lsusb
+    adb -s ${ADEV} shell chmod 777 ${ADIR}/sample/usbreset
+    adb -s ${ADEV} shell chmod 777 ${ADIR}/sample/usbhid-dump
 
     # Run lsusb to
     adb -s ${ADEV} shell LD_LIBRARY_PATH=${ADIR}/sample ${ADIR}/sample/lsusb
+    adb -s ${ADEV} shell LD_LIBRARY_PATH=${ADIR}/sample ${ADIR}/sample/usbreset
 
 For a non rooted device it is possible to install usbutils into the sdcard
 area as shown above (with ADIR="/sdcard") but neither you will be able to
