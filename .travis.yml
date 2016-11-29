@@ -27,3 +27,4 @@ addons:
 script:
     - ./autogen.sh && make -j4 && make maintainer-clean
     - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then ./travis-autogen.sh && make -j4; fi
+    - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then ./travis-autogen.sh --disable-udev && make -j4; fi
